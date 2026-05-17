@@ -4,12 +4,14 @@ export default function Card({ children, className = "" }) {
   return (
     <motion.div
       whileHover={{
-        y: -6,
-        scale: 1.03,
+        y: -10,
+        scale: 1.04,
+        rotateX: 2,
+        rotateY: -2,
       }}
       transition={{
         type: "spring",
-        stiffness: 220,
+        stiffness: 200,
         damping: 18,
       }}
       className={`
@@ -17,21 +19,39 @@ export default function Card({ children, className = "" }) {
         overflow-hidden
         rounded-3xl
         border border-white/10
-        bg-[#0f1729]/80
-        backdrop-blur-xl
+        bg-gradient-to-b from-white/10 to-white/5
+        backdrop-blur-2xl
         p-6
-        shadow-2xl
+        shadow-[0_20px_80px_rgba(0,0,0,0.6)]
+        transform-gpu
         ${className}
       `}
     >
-      {/* glow mais leve (não mata contraste) */}
+      {/* glow interno dinâmico */}
       <div className="
-        absolute inset-0
-        rounded-3xl
-        bg-blue-500/5
+        absolute -inset-20
+        bg-gradient-to-r
+        from-blue-500/10
+        via-purple-500/10
+        to-transparent
+        blur-3xl
         opacity-60
       " />
 
+      {/* highlight superior (efeito vidro) */}
+      <div className="
+        absolute inset-0
+        bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.12),transparent_60%)]
+      " />
+
+      {/* borda brilhante suave */}
+      <div className="
+        absolute inset-0
+        rounded-3xl
+        border border-white/10
+      " />
+
+      {/* conteúdo */}
       <div className="relative z-10">
         {children}
       </div>

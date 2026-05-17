@@ -1,23 +1,39 @@
 import { Canvas } from "@react-three/fiber";
-import { OrbitControls, Sphere } from "@react-three/drei";
+import { OrbitControls, useTexture } from "@react-three/drei";
 
 function Planet() {
+  const texture = useTexture(
+    "https://threejs.org/examples/textures/land_ocean_ice_cloud_2048.jpg"
+  );
+
   return (
-    <Sphere args={[1, 32, 32]}>
-      <meshStandardMaterial color="royalblue" />
-    </Sphere>
+    <mesh>
+      <sphereGeometry args={[2.2, 64, 64]} />
+      <meshStandardMaterial map={texture} />
+    </mesh>
   );
 }
 
 export default function Universe() {
   return (
-    <Canvas camera={{ position: [0, 0, 5] }}>
-      <ambientLight intensity={0.5} />
-      <pointLight position={[10, 10, 10]} />
+    <div className="fixed inset-0 -z-10">
+      <Canvas camera={{ position: [0, 0, 6] }}>
 
-      <Planet />
+        {/* lights equilibradas */}
+        <ambientLight intensity={0.5} />
+        <directionalLight position={[5, 5, 5]} intensity={2} />
+        <pointLight position={[-5, -3, -5]} intensity={1.2} />
 
-      <OrbitControls />
-    </Canvas>
+        <Planet />
+
+        <OrbitControls
+          enableZoom={false}
+          enablePan={false}
+          autoRotate
+          autoRotateSpeed={0.6}
+        />
+
+      </Canvas>
+    </div>
   );
 }
