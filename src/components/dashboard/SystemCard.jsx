@@ -7,7 +7,6 @@ export default function SystemCard() {
   const [ram, setRam] = useState(0);
   const [net, setNet] = useState(0);
 
-  // simulação leve (depois pode virar real com performance API)
   useEffect(() => {
     const interval = setInterval(() => {
       setCpu(Math.floor(20 + Math.random() * 60));
@@ -37,7 +36,7 @@ export default function SystemCard() {
           <h2 className="text-white font-semibold">System Monitor</h2>
         </div>
 
-        <span className="text-xs text-green-400">LIVE</span>
+        <span className="text-xs text-cyan-400">LIVE</span>
       </div>
 
       {/* CPU */}
@@ -59,7 +58,7 @@ export default function SystemCard() {
           </span>
           <span>{ram}%</span>
         </div>
-        <Bar value={ram} color="bg-purple-500" />
+        <Bar value={ram} color="bg-blue-400" />
       </div>
 
       {/* NETWORK */}
@@ -73,7 +72,7 @@ export default function SystemCard() {
         <Bar value={Math.min(net, 100)} color="bg-cyan-400" />
       </div>
 
-      {/* FOOTER STATUS */}
+      {/* FOOTER */}
       <div className="flex items-center justify-between text-xs text-white/30">
         <span>System stable</span>
         <span className="text-white/40">v1.0</span>

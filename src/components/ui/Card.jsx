@@ -32,7 +32,7 @@ export default function Card({ children, className = "" }) {
         absolute -inset-20
         bg-gradient-to-r
         from-blue-500/10
-        via-purple-500/10
+        via-purple-600/10
         to-transparent
         blur-3xl
         opacity-60

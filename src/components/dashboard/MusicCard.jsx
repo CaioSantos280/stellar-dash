@@ -151,7 +151,7 @@ export default function MusicCard() {
 
         <div className="h-2 rounded-full bg-white/10 overflow-hidden">
           <div
-            className="h-full bg-gradient-to-r from-blue-400 to-purple-400 transition-all"
+            className="h-full bg-gradient-to-r from-blue-400 to-blue-600 transition-all"
             style={{ width: `${progress}%` }}
           />
         </div>
@@ -175,7 +175,7 @@ export default function MusicCard() {
         {/* 🔥 SOM SÓ AQUI */}
         <button
           onClick={toggleMusic}
-          className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center shadow-lg hover:scale-105 transition"
+          className="w-14 h-14 rounded-2xl bg-gradient-to-r from-blue-400 to-blue-600 flex items-center justify-center shadow-lg hover:scale-105 transition"
         >
           {isPlaying ? (
             <Pause size={22} fill="white" />

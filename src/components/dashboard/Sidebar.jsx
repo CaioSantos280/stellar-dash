@@ -26,7 +26,7 @@ export default function Sidebar() {
           <span
             className={`
               absolute inset-0 opacity-20 animate-pulse rounded-xl
-              ${isDashboard ? "bg-blue-500" : "bg-purple-500"}
+              ${isDashboard ? "bg-blue-500" : "bg-purple-600"}
             `}
           />
         )}
@@ -36,7 +36,7 @@ export default function Sidebar() {
           <span
             className={`
               absolute left-0 top-2 bottom-2 w-[2px] rounded-full
-              ${isDashboard ? "bg-blue-400" : "bg-purple-400"}
+              ${isDashboard ? "bg-blue-500" : "bg-purple-600"}
             `}
           />
         )}
@@ -54,13 +54,14 @@ export default function Sidebar() {
 
   return (
     <aside className="
-      relative w-64 h-screen p-6
-      bg-[#00040c]/95
-      backdrop-blur-3xl
-      border-r border-white/5
-      flex flex-col
-      overflow-hidden
-    ">
+-  relative w-64 h-screen p-6
++  relative w-64 h-screen p-6 z-50
+   bg-[#00040c]/95
+   backdrop-blur-3xl
+   border-r border-white/5
+   flex flex-col
+   overflow-hidden
+">
 
       {/* deep space layer */}
       <div className="
