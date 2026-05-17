@@ -92,7 +92,7 @@ export default function WeatherCard() {
       whileHover={{ scale: 1.02 }}
       className="h-64"
     >
-      <Card className="h-64">
+      <Card className="h-80">
         <div className="flex items-start justify-between">
           <div>
             <p className="text-white/50 text-sm mb-2">

@@ -1,15 +1,16 @@
 import WeatherCard from "../components/dashboard/WeatherCard";
 import MusicCard from "../components/dashboard/MusicCard";
 import SystemCard from "../components/dashboard/SystemCard";
-
 import Stars from "../components/space/StarsBackground";
 import Sidebar from "../components/dashboard/Sidebar";
 import Header from "../components/dashboard/Header";
 import Space from "./Space";
+import SystemLogCard from "../components/dashboard/SystemLogCard";
 
+import { useEffect } from "react";
+import { useSystemStore } from "../state/systemStore";
 import { motion, AnimatePresence } from "framer-motion";
 import { useUIStore } from "../state/uiStore";
-import { useEffect } from "react";
 import { playHoverSound } from "../utils/sound";
 
 export default function Home() {
@@ -17,8 +18,25 @@ export default function Home() {
 
   // 🔊 inicializa som UMA vez
   useEffect(() => {
-    initHoverSound();
+    playHoverSound();
   }, []);
+  const { drainBattery, addNotification, battery } = useSystemStore();
+
+useEffect(() => {
+  const interval = setInterval(() => {
+    drainBattery();
+
+    if (battery === 50) {
+      addNotification("⚠ Battery reaching mid level");
+    }
+
+    if (battery === 20) {
+      addNotification("🔴 Critical energy level");
+    }
+  }, 8000);
+
+  return () => clearInterval(interval);
+}, [battery]);
 
   return (
     <main className="relative min-h-screen text-white overflow-hidden">
@@ -75,6 +93,7 @@ export default function Home() {
                 <WeatherCard />
                 <MusicCard />
                 <SystemCard />
+                <SystemLogCard />
               </motion.div>
             )}
 

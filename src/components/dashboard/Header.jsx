@@ -1,19 +1,22 @@
-import { Search, Bell, Wifi, Battery } from "lucide-react";
+import { Search, Bell, Battery } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useSystemStore } from "../../state/systemStore";
 
 export default function Header() {
+  const { battery, notifications } = useSystemStore();
+
   const [time, setTime] = useState("");
 
   useEffect(() => {
     const updateTime = () => {
       const now = new Date();
 
-      const formatted = now.toLocaleTimeString([], {
-        hour: "2-digit",
-        minute: "2-digit",
-      });
-
-      setTime(formatted);
+      setTime(
+        now.toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        })
+      );
     };
 
     updateTime();
@@ -23,104 +26,90 @@ export default function Header() {
   }, []);
 
   return (
-    <header className="flex items-center justify-between gap-6 mb-10">
+    <header className="
+      flex items-center justify-between
+      mb-10 px-4 py-3
+      rounded-2xl
+      bg-white/5
+      border border-white/10
+      backdrop-blur-2xl
+    ">
 
-      {/* SEARCH */}
-      <div className="flex items-center gap-4 flex-1">
+      {/* LEFT - SEARCH */}
+      <div className="relative w-full max-w-md">
 
-        <div className="relative flex-1 max-w-xl">
+        <Search
+          size={16}
+          className="absolute left-3 top-1/2 -translate-y-1/2 text-white/40"
+        />
 
-          <Search
-            size={18}
-            className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40"
-          />
-
-          <input
-            type="text"
-            placeholder="Search universe, system..."
-            className="
-              w-full h-14
-              rounded-2xl
-              bg-white/5
-              border border-white/10
-              pl-12 pr-4
-              outline-none
-              backdrop-blur-2xl
-              text-white
-              placeholder:text-white/30
-              focus:border-blue-400/40
-              focus:bg-white/10
-              transition
-            "
-          />
-
-        </div>
+        <input
+          type="text"
+          placeholder="Search system, universe..."
+          className="
+            w-full
+            bg-transparent
+            pl-9 pr-3
+            outline-none
+            text-white
+            placeholder:text-white/30
+          "
+        />
 
       </div>
 
       {/* RIGHT SIDE */}
       <div className="flex items-center gap-3">
 
-        {/* SYSTEM STATUS BOX (melhor que antes) */}
-        <div className="
-          hidden md:flex
-          items-center gap-3
-          h-14 px-4
-          rounded-2xl
-          bg-white/5
-          border border-white/10
-          backdrop-blur-2xl
-          text-white/70
-          text-sm
-        ">
-          <Wifi size={16} className="text-green-400" />
-          Online
-        </div>
-
         {/* TIME */}
         <div className="
-          h-14 px-5
-          rounded-2xl
+          h-10 px-4
+          rounded-xl
           bg-white/5
           border border-white/10
           backdrop-blur-2xl
           flex items-center
-          text-sm font-medium
-          text-white/80
+          text-sm font-mono
+          text-white/70
         ">
           {time}
         </div>
 
-        {/* NOTIFICATION */}
+        {/* BATTERY */}
+        <div className={`
+          w-10 h-10
+          rounded-xl
+          border border-white/10
+          flex items-center justify-center
+          transition
+          ${battery > 50 ? "bg-blue-500/10" : "bg-red-500/10"}
+        `}>
+          <Battery size={16} className="text-white/70" />
+        </div>
+
+        {/* NOTIFICATIONS (AGORA REAL) */}
         <button className="
-          relative w-14 h-14
-          rounded-2xl
+          relative w-10 h-10
+          rounded-xl
           bg-white/5
           border border-white/10
-          backdrop-blur-2xl
           flex items-center justify-center
           hover:bg-white/10
           transition
         ">
-          <Bell size={20} />
+          <Bell size={18} />
 
-          {/* dot de notificação */}
-          <span className="absolute top-3 right-3 w-2 h-2 bg-red-500 rounded-full" />
+          {notifications > 0 && (
+            <span className="
+              absolute top-2 right-2
+              w-2 h-2 bg-red-500
+              rounded-full animate-pulse
+            " />
+          )}
         </button>
 
-        {/* BATTERY / STATUS BOX NOVO (o quadrado que você queria mais útil) */}
-        <div className="
-          w-14 h-14
-          rounded-2xl
-          bg-gradient-to-br from-blue-500/20 to-purple-500/20
-          border border-white/10
-          backdrop-blur-2xl
-          flex items-center justify-center
-        ">
-          <Battery size={18} className="text-white/70" />
-        </div>
-
       </div>
+
     </header>
   );
 }
