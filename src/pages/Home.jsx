@@ -10,7 +10,7 @@ import Space from "./Space";
 import { motion, AnimatePresence } from "framer-motion";
 import { useUIStore } from "../state/uiStore";
 import { useEffect } from "react";
-import { initHoverSound } from "../utils/sound";
+import { playHoverSound } from "../utils/sound";
 
 export default function Home() {
   const { mode } = useUIStore();
