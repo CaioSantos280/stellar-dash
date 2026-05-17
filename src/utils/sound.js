@@ -1,16 +1,14 @@
-let isPlaying = false;
+let lastTime = 0;
 
 export function playHoverSound() {
-  if (isPlaying) return;
+  const now = Date.now();
 
-  isPlaying = true;
+  // debounce leve (evita spam, mas não quebra UI)
+  if (now - lastTime < 60) return;
+  lastTime = now;
 
   const audio = new Audio("/hover.mp3");
   audio.volume = 0.05;
 
-  audio.play().finally(() => {
-    setTimeout(() => {
-      isPlaying = false;
-    }, 80);
-  });
+  audio.play().catch(() => {});
 }
