@@ -5,7 +5,8 @@ import WeatherCard from "../components/dashboard/WeatherCard";
 import MusicCard from "../components/dashboard/MusicCard";
 import SystemCard from "../components/dashboard/SystemCard";
 import SystemLogCard from "../components/dashboard/SystemLogCard";
-
+import EnergyCoreCard from "../components/dashboard/EnergyCoreCard";
+import SignalTrackerCard from "../components/dashboard/SignalTrackerCard";
 import LoadingScreen from "../components/system/LoadingScreen";
 
 import Stars from "../components/space/StarsBackground";
@@ -114,6 +115,8 @@ export default function Home() {
                   <MusicCard />
                   <SystemCard />
                   <SystemLogCard />
+                  <SignalTrackerCard />
+                  <EnergyCoreCard />
                 </motion.div>
               )}
             </AnimatePresence>
