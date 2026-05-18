@@ -1,7 +1,7 @@
 import { create } from "zustand";
 
 export const useSystemStore = create((set, get) => ({
-  mode: "dashboard",
+  /* ---------------- STATE ---------------- */
 
   battery: 78,
   cpu: 15,
@@ -10,27 +10,49 @@ export const useSystemStore = create((set, get) => ({
 
   notifications: [],
 
-  intervalId: null,
-  batteryId: null,
+  systemLoopId: null,
+  batteryLoopId: null,
 
-  /* ---------------- SYSTEM LOOPS ---------------- */
+  /* ---------------- SYSTEM LOOP ---------------- */
 
   startSystemLoop: () => {
-    if (get().intervalId) return;
+    if (get().systemLoopId) return;
 
     const id = setInterval(() => {
       set((state) => ({
-        cpu: Math.max(5, Math.min(100, state.cpu + (Math.random() * 18 - 9))),
-        ram: Math.max(10, Math.min(100, state.ram + (Math.random() * 10 - 5))),
-        network: Math.max(20, Math.min(100, state.network + (Math.random() * 25 - 12))),
+        cpu: Math.max(
+          5,
+          Math.min(
+            100,
+            state.cpu + (Math.random() * 18 - 9)
+          )
+        ),
+
+        ram: Math.max(
+          10,
+          Math.min(
+            100,
+            state.ram + (Math.random() * 10 - 5)
+          )
+        ),
+
+        network: Math.max(
+          20,
+          Math.min(
+            100,
+            state.network + (Math.random() * 25 - 12)
+          )
+        ),
       }));
     }, 1200);
 
-    set({ intervalId: id });
+    set({ systemLoopId: id });
   },
 
+  /* ---------------- BATTERY LOOP ---------------- */
+
   startBatteryLoop: () => {
-    if (get().batteryId) return;
+    if (get().batteryLoopId) return;
 
     const id = setInterval(() => {
       set((state) => ({
@@ -38,24 +60,25 @@ export const useSystemStore = create((set, get) => ({
       }));
     }, 1000);
 
-    set({ batteryId: id });
+    set({ batteryLoopId: id });
   },
 
-  stopSystem: () => {
-    clearInterval(get().intervalId);
-    clearInterval(get().batteryId);
-
-    set({ intervalId: null, batteryId: null });
-  },
+  /* ---------------- INIT / STOP ---------------- */
 
   initSystem: () => {
     get().startSystemLoop();
     get().startBatteryLoop();
   },
 
-  /* ---------------- MODE ---------------- */
+  stopSystem: () => {
+    clearInterval(get().systemLoopId);
+    clearInterval(get().batteryLoopId);
 
-  setMode: (mode) => set({ mode }),
+    set({
+      systemLoopId: null,
+      batteryLoopId: null,
+    });
+  },
 
   /* ---------------- NOTIFICATIONS ---------------- */
 
@@ -63,7 +86,15 @@ export const useSystemStore = create((set, get) => ({
     const id = Date.now();
 
     set((state) => ({
-      notifications: [{ id, message }, ...state.notifications],
+      notifications: [
+        {
+          id,
+          message,
+          createdAt: Date.now(),
+        },
+        ...state.notifications,
+      ],
+
       cpu: Math.min(100, state.cpu + 5),
     }));
 
@@ -74,16 +105,41 @@ export const useSystemStore = create((set, get) => ({
 
   removeNotification: (id) => {
     set((state) => ({
-      notifications: state.notifications.filter((n) => n.id !== id),
+      notifications: state.notifications.filter(
+        (notification) => notification.id !== id
+      ),
     }));
   },
 
-  clearNotifications: () => set({ notifications: [] }),
+  clearNotifications: () => {
+    set({ notifications: [] });
+  },
 
-  /* ---------------- INTEL ---------------- */
+  /* ---------------- HELPERS ---------------- */
+
+  rechargeBattery: () => {
+    set((state) => ({
+      battery: Math.min(100, state.battery + 10),
+    }));
+  },
+
+  resetSystem: () => {
+    set({
+      battery: 100,
+      cpu: 10,
+      ram: 20,
+      network: 80,
+      notifications: [],
+    });
+  },
 
   isCritical: () => {
-    const s = get();
-    return s.battery < 20 || s.cpu > 90;
+    const state = get();
+
+    return (
+      state.battery < 20 ||
+      state.cpu > 90 ||
+      state.ram > 90
+    );
   },
 }));
