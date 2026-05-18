@@ -5,22 +5,21 @@ function StarField() {
   const meshRef = useRef();
 
   const particles = useMemo(() => {
-    const temp = new Float32Array(2000 * 3);
+    const temp = new Float32Array(1500 * 3);
 
-    for (let i = 0; i < 2000; i++) {
-      temp[i * 3] = (Math.random() - 0.5) * 100;
-      temp[i * 3 + 1] = (Math.random() - 0.5) * 100;
-      temp[i * 3 + 2] = (Math.random() - 0.5) * 100;
+    for (let i = 0; i < 1500; i++) {
+      temp[i * 3] = (Math.random() - 0.5) * 160;
+      temp[i * 3 + 1] = (Math.random() - 0.5) * 160;
+      temp[i * 3 + 2] = (Math.random() - 0.5) * 160;
     }
 
     return temp;
   }, []);
 
-  useFrame((state, delta) => {
-    if (meshRef.current) {
-      meshRef.current.rotation.y += delta * 0.05;
-      meshRef.current.rotation.x += delta * 0.02;
-    }
+  useFrame((_, delta) => {
+    if (!meshRef.current) return;
+
+    meshRef.current.rotation.y += delta * 0.003;
   });
 
   return (
@@ -35,11 +34,12 @@ function StarField() {
       </bufferGeometry>
 
       <pointsMaterial
-        size={0.05}
+        size={0.12}
         sizeAttenuation
-        color="#ffffff"
+        color="#8ec5ff"
         transparent
-        opacity={1}
+        opacity={0.7}
+        depthWrite={false}
       />
     </points>
   );
@@ -48,17 +48,15 @@ function StarField() {
 export default function Stars() {
   return (
     <div
-      style={{
-        position: "fixed",
-        inset: 0,
-        backgroundColor: "#050816",
-        pointerEvents: "none",
-        zIndex: 0,
-      }}
+      className="
+        fixed inset-0
+        pointer-events-none
+        z-[1]
+      "
     >
       <Canvas
-        style={{ width: "100vw", height: "100vh" }}
         camera={{ position: [0, 0, 5] }}
+        gl={{ alpha: true }}
       >
         <StarField />
       </Canvas>

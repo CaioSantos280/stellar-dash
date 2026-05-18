@@ -19,7 +19,7 @@ export default function Card({ children, className = "" }) {
         overflow-hidden
         rounded-3xl
         border border-white/10
-        bg-gradient-to-b from-white/10 to-white/5
+        bg-[#081120]/80
         backdrop-blur-2xl
         p-6
         shadow-[0_20px_80px_rgba(0,0,0,0.6)]
@@ -31,8 +31,8 @@ export default function Card({ children, className = "" }) {
       <div className="
         absolute -inset-20
         bg-gradient-to-r
-        from-blue-500/10
-        via-purple-600/10
+        from-cyan-500/10
+        via-blue-500/5
         to-transparent
         blur-3xl
         opacity-60

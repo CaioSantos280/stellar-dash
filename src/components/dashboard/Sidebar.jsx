@@ -111,7 +111,7 @@ export default function Sidebar() {
         </div>
 
         <div className="h-1 w-full bg-white/5 rounded-full overflow-hidden">
-          <div className="h-full w-2/3 bg-gradient-to-r from-blue-500/60 to-purple-500/60" />
+          <div className="h-full w-2/3 bg-gradient-to-r from-blue-500/60 to-cyan-500/60" />
         </div>
 
       </div>
