@@ -56,18 +56,7 @@ function GiantPlanet() {
   return (
     <group position={[-6, 0, -6]}>
 
-      {/* atmosphere */}
-
-      <mesh scale={1.16}>
-        <sphereGeometry args={[5.5, 64, 64]} />
-
-        <meshBasicMaterial
-          color="#60a5fa"
-          transparent
-          opacity={0.18}
-          side={THREE.BackSide}
-        />
-      </mesh>
+      
 
 
 
@@ -77,7 +66,7 @@ function GiantPlanet() {
         <sphereGeometry args={[5.5, 32, 32]} />
 
         <meshBasicMaterial
-          color="#2563eb"
+          color="#eb9525"
           transparent
           opacity={0.05}
         />
