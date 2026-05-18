@@ -60,17 +60,7 @@ function GiantPlanet() {
 
 
 
-      {/* glow */}
-
-      <mesh scale={1.35}>
-        <sphereGeometry args={[5.5, 32, 32]} />
-
-        <meshBasicMaterial
-          color="#eb9525"
-          transparent
-          opacity={0.05}
-        />
-      </mesh>
+      
 
 
 
