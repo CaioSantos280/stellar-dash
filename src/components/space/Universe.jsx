@@ -73,7 +73,6 @@ function GiantPlanet() {
           map={texture}
           roughness={0.92}
           metalness={0.05}
-          emissive="#1d4ed8"
           emissiveIntensity={0.15}
         />
       </mesh>
