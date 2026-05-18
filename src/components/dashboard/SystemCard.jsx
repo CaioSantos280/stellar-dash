@@ -1,83 +1,185 @@
-import { Activity, Cpu, MemoryStick, Wifi } from "lucide-react";
+import {
+  Activity,
+  Cpu,
+  MemoryStick,
+  Wifi,
+  Battery,
+} from "lucide-react";
+
 import Card from "../ui/Card";
-import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+import { useSystemStore } from "../../state/systemStore";
 
 export default function SystemCard() {
-  const [cpu, setCpu] = useState(0);
-  const [ram, setRam] = useState(0);
-  const [net, setNet] = useState(0);
+  const cpu = useSystemStore((s) => s.cpu);
+  const ram = useSystemStore((s) => s.ram);
+  const network = useSystemStore((s) => s.network);
+  const battery = useSystemStore((s) => s.battery);
+  const eventPulse = useSystemStore((s) => s.eventPulse);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCpu(Math.floor(20 + Math.random() * 60));
-      setRam(Math.floor(30 + Math.random() * 50));
-      setNet(Math.floor(10 + Math.random() * 80));
-    }, 1500);
-
-    return () => clearInterval(interval);
-  }, []);
+  const isCritical =
+    battery < 20 || cpu > 90 || ram > 90;
 
   const Bar = ({ value, color }) => (
-    <div className="w-full h-2 bg-white/10 rounded-full overflow-hidden">
-      <div
-        className={`h-full transition-all duration-700 ${color}`}
-        style={{ width: `${value}%` }}
+    <div className="h-2 w-full overflow-hidden rounded-full bg-white/10">
+      <motion.div
+        animate={{
+          width: `${value}%`,
+        }}
+        transition={{
+          duration: 0.6,
+          ease: "easeOut",
+        }}
+        className={`h-full rounded-full ${color}`}
       />
     </div>
   );
 
   return (
-    <Card className="h-80">
+    <Card
+      className={`
+        h-80 transition-all duration-500
 
+        ${
+          isCritical
+            ? "border-red-500/40 shadow-[0_0_50px_rgba(239,68,68,0.18)]"
+            : "border-cyan-500/10"
+        }
+
+        ${
+          eventPulse > 0.7
+            ? "scale-[1.015]"
+            : "scale-100"
+        }
+      `}
+    >
       {/* HEADER */}
-      <div className="flex items-center justify-between mb-6">
+      <div className="mb-6 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <Activity className="text-blue-400" size={18} />
-          <h2 className="text-white font-semibold">System Monitor</h2>
+          <Activity
+            className={
+              isCritical
+                ? "text-red-400"
+                : "text-cyan-400"
+            }
+            size={18}
+          />
+
+          <h2 className="font-semibold text-white">
+            System Monitor
+          </h2>
         </div>
 
-        <span className="text-xs text-cyan-400">LIVE</span>
+        <div className="flex items-center gap-2">
+          <div
+            className={`
+              h-2 w-2 rounded-full animate-pulse
+              ${
+                isCritical
+                  ? "bg-red-400"
+                  : "bg-cyan-400"
+              }
+            `}
+          />
+
+          <span
+            className={`
+              text-xs tracking-[0.25em]
+              ${
+                isCritical
+                  ? "text-red-400"
+                  : "text-cyan-400"
+              }
+            `}
+          >
+            LIVE
+          </span>
+        </div>
       </div>
 
       {/* CPU */}
-      <div className="mb-4">
-        <div className="flex items-center justify-between text-xs text-white/60 mb-1">
-          <span className="flex items-center gap-2">
-            <Cpu size={14} /> CPU
-          </span>
-          <span>{cpu}%</span>
-        </div>
-        <Bar value={cpu} color="bg-blue-500" />
-      </div>
+      <Metric
+        icon={<Cpu size={14} />}
+        label="CPU"
+        value={cpu}
+        barColor={cpu > 85 ? "bg-red-500" : "bg-blue-500"}
+      />
 
       {/* RAM */}
-      <div className="mb-4">
-        <div className="flex items-center justify-between text-xs text-white/60 mb-1">
-          <span className="flex items-center gap-2">
-            <MemoryStick size={14} /> RAM
-          </span>
-          <span>{ram}%</span>
-        </div>
-        <Bar value={ram} color="bg-blue-400" />
-      </div>
+      <Metric
+        icon={<MemoryStick size={14} />}
+        label="RAM"
+        value={ram}
+        barColor={ram > 85 ? "bg-red-500" : "bg-cyan-400"}
+      />
 
-      {/* NETWORK */}
-      <div className="mb-6">
-        <div className="flex items-center justify-between text-xs text-white/60 mb-1">
-          <span className="flex items-center gap-2">
-            <Wifi size={14} /> Network
-          </span>
-          <span>{net} ms</span>
-        </div>
-        <Bar value={Math.min(net, 100)} color="bg-cyan-400" />
-      </div>
+      {/* NETWORK (corrigido visualmente) */}
+      <Metric
+        icon={<Wifi size={14} />}
+        label="NETWORK"
+        value={Math.min(network, 100)}
+        suffix="ms"
+        barColor="bg-sky-400"
+      />
+
+      {/* BATTERY */}
+      <Metric
+        icon={<Battery size={14} />}
+        label="POWER CELL"
+        value={battery}
+        barColor={battery < 20 ? "bg-red-500" : "bg-emerald-400"}
+      />
 
       {/* FOOTER */}
-      <div className="flex items-center justify-between text-xs text-white/30">
-        <span>System stable</span>
-        <span className="text-white/40">v1.0</span>
+      <div className="flex items-center justify-between border-t border-white/5 pt-4 text-xs">
+        <span
+          className={
+            isCritical ? "text-red-400" : "text-white/40"
+          }
+        >
+          {isCritical
+            ? "Critical system load"
+            : "All systems operational"}
+        </span>
+
+        <span className="text-white/30">
+          SYS v2.5.0
+        </span>
+      </div>
+    </Card>
+  );
+}
+
+/* ---------------- COMPONENT AUXILIAR ---------------- */
+
+function Metric({
+  icon,
+  label,
+  value,
+  barColor,
+  suffix = "%",
+}) {
+  return (
+    <div className="mb-5">
+      <div className="mb-1 flex items-center justify-between text-xs text-white/60">
+        <span className="flex items-center gap-2">
+          {icon}
+          {label}
+        </span>
+
+        <span>
+          {value.toFixed(0)}
+          {suffix}
+        </span>
       </div>
 
-    </Card>
+      <div className="h-2 w-full overflow-hidden rounded-full bg-white/10">
+        <motion.div
+          animate={{ width: `${value}%` }}
+          transition={{ duration: 0.6 }}
+          className={`h-full rounded-full ${barColor}`}
+        />
+      </div>
+    </div>
   );
 }
